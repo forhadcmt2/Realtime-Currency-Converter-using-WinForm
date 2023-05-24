@@ -101,13 +101,15 @@
             // panel1
             // 
             panel1.Controls.Add(startBtn);
-            panel1.Location = new Point(0, 2);
+            panel1.Location = new Point(0, -2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1141, 702);
+            panel1.Size = new Size(1141, 706);
             panel1.TabIndex = 7;
             // 
             // startBtn
             // 
+            startBtn.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            startBtn.ForeColor = SystemColors.ActiveCaptionText;
             startBtn.Location = new Point(446, 328);
             startBtn.Margin = new Padding(4, 5, 4, 5);
             startBtn.Name = "startBtn";

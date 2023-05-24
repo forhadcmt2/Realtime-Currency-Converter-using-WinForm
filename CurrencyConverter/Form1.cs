@@ -10,10 +10,10 @@ namespace CurrencyConverter
         private string baseUri = "https://cdn.jsdelivr.net/";
         private string currencyListUri = "gh/fawazahmed0/currency-api@1/latest/currencies.json";
 
-        private string usdBasedCurrencyValueUri = "gh/fawazahmed0/currency-api@1/latest/currencies/usd.json";
-
-        private List<string>? currencyNames = new List<string>();
-        private List<double>? currencyValues = new List<double>();
+        private string currentDate = string.Empty;
+        private string usdBasedCurrencyValueUri = $"gh/fawazahmed0/currency-api@1/latest/currencies/usd.json";
+        private List<string>? currencyNames = new List<string>(); //usd, bdt, eur, 
+        private List<double>? currencyValues = new List<double>(); // 1, 100, etc
 
         public Form1()
         {
@@ -50,8 +50,13 @@ namespace CurrencyConverter
         {
             EnableDisableButton(startBtn, "Please wait....", false);
 
+            //Changing the url with latest date
+            string currencyNameUriWithDate = currencyListUri.Replace("latest", DateTime.UtcNow.ToString("yyyy-MM-dd"));
             string currencyNameList = await SendHTTPRequest(currencyListUri, ResetStartPageToNormal);
-            string currencyValue = await SendHTTPRequest(usdBasedCurrencyValueUri, ResetStartPageToNormal);
+
+            //Changing the url with latest date
+            string currencyValueUriWithDate = usdBasedCurrencyValueUri.Replace("latest", DateTime.UtcNow.ToString("yyyy-MM-dd"));
+            string currencyValue = await SendHTTPRequest(currencyValueUriWithDate, ResetStartPageToNormal);
 
             ParseCurrencyList(currencyNameList);
             ParseCurrencyValues(currencyValue);
@@ -182,14 +187,13 @@ namespace CurrencyConverter
 
                 JsonNode? node = JsonNode.Parse(result);
 
-                var jObject = JsonObject.Parse(result);
-
                 Dictionary<string, double> currencyValueDic = node["usd"].Deserialize<Dictionary<string, double>>();
                 amountTextBox.Text = "1";
 
                 currencyValues.Clear();
 
                 currencyValues = currencyValueDic.Values.ToList();
+
                 ConvertCurrency();
 
                 EnableDisableStartPanel(false);
